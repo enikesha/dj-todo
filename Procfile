@@ -1,0 +1,1 @@
+web: gunicorn dj_todo.wsgi -b 0.0.0.0:$PORT
