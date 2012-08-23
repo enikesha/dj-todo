@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'gunicorn',
     'south',
+    'todos',
 )
 
 # A sample logging configuration. The only tangible logging
