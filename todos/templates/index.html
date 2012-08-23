@@ -1,11 +1,90 @@
 <!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-  <title>ToDo</title>
-</head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
+	<title>ToDos</title>
+	<meta name="description" content="Simple ToDos">
+	<meta name="author" content="Innocenty Enikeew <enikesha@gmail.com>">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+	<style>
+	body {
+	  padding-top: 60px;
+	  padding-bottom: 40px;
+	}
+	</style>
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
+
+	<script src="{{ STATIC_URL }}js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+
+	<!-- Le fav and touch icons -->
+	<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}apple-touch-icon-144-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}apple-touch-icon-114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}apple-touch-icon-72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}apple-touch-icon-57-precomposed.png">
+</head>
 <body>
-<div role="main">
-  <h1>ToDos</h1>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <span class="brand">ToDo</span>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+<!--              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+-->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <h1>ToDo list</h1>
+
+      <div class="row">
+	<div class="span4 main">
+	  <ul id="items" class="unstyled form-inline">
+	    <li id="todo-template" style="display:none">
+	      <label class="checkbox"><input type="checkbox"><span>Task #1</span></label>
+	      <a href="{% url items %}" class="todo-remove pull-right"><i class="icon-remove"></i></a>
+	    </li>
+	  </ul>
+	  <div id="loader" class="progress progress-striped active">
+	    <div class="bar" style="width:100%"></div>
+	  </div>
+	  <form id="items-form" class="form-inline" action="{% url items %}" method="POST">{% csrf_token %}
+	    <input name="text" class="span3" type="text" placeholder="New ToDo">
+	    <button type="submit" class="btn todo-add"><i class="icon-plus"></i></button>
+	  </form>
+	</div>
+      </div>
+
+    </div> <!-- /container -->
+
+<div id="alert-template" class="alert alert-error" style="display:none">
+  <button type="button" class="close" data-dismiss="alert">×</button>
 </div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+<script src="{{ STATIC_URL }}js/libs/bootstrap/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}js/script.js"></script>
 </body>
 </html>
