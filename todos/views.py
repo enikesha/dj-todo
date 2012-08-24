@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, get_object_or_404
+from django.http import QueryDict
 from todos.models import ToDo
 from todos.helpers import json, serialize
 
@@ -18,3 +19,8 @@ def item(request, pk):
     if request.method == 'DELETE':
         item.delete()
         return json('ok')
+    elif request.method == 'PUT':
+        data = QueryDict(request.body, encoding=request.encoding)
+        item.complete = data['complete'] == 'true'
+        item.save()
+        return serialize([item])

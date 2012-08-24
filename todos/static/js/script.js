@@ -15,6 +15,10 @@
 	var item = $item.clone(true).attr('data-pk', data.pk);
 	item.find('label > span').text(data.fields.text);
 	item.find('a').attr('href', function(idx, val){ return val + data.pk + '/'});
+	if (data.fields.complete) {
+	    item.find(':checkbox').attr('checked', 'true');
+	    item.addClass('complete');
+	}
 	return item;
     };
     var addAlert = function(text) {
@@ -22,7 +26,22 @@
     }
     
     // Bind actions
-    $('.todo-remove').click(function(e){
+    $('#items :checkbox').click(function(e){
+	var pk = $(this).parents('li').attr('data-pk');
+	$.ajax($(this).parent().siblings('a').attr('href'), {
+	    type:'PUT',
+	    data:{complete: this.checked},
+	    success: function(data) {
+		$("#items li[data-pk='" + pk + "']").replaceWith(getItem(data[0]).show());
+	    },
+	    error: function(data) {
+		addAlert('<strong>Error</strong> ' + data.statusText);
+	    },
+	    complete: function() { $loader.hide(); }
+	});
+	$loader.show();
+    });
+    $('#items .todo-remove').click(function(e){
 	e.preventDefault();
 	var pk = $(this).parent().attr('data-pk');
 
@@ -32,7 +51,7 @@
 		$("#items li[data-pk='" + pk + "']").remove();
 	    },
 	    error: function(data) {
-		addAlert('<strong>Error</strong>' + data.statusText);
+		addAlert('<strong>Error</strong> ' + data.statusText);
 	    },
 	    complete: function() { $loader.hide(); }
 	});
