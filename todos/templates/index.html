@@ -59,28 +59,40 @@
       <h1>ToDo list</h1>
 
       <div class="row">
+	<div class="span2 named">
+	  <ul id="lists" class="nav nav-pills nav-stacked">
+	    <li id="list-template" style="display:none"><a href="/lists/1/">List 1</a></li>
+	  </ul>
+	  <form id="lists-form" class="form-inline" action="{% url lists %}" method="POST">
+	    <input name="name" type="text" placeholder="New List">
+	    <button type="submit" class="btn list-add"><i class="icon-plus"></i></button>
+	  </form>
+	</div>
+
 	<div class="span4 main">
 	  <ul id="items" class="unstyled form-inline">
 	    <li id="todo-template" style="display:none">
 	      <label class="checkbox"><input type="checkbox"><span>Task #1</span></label>
-	      <a href="{% url items %}" class="todo-remove pull-right"><i class="icon-remove"></i></a>
+	      <a href="/item/1/" class="todo-remove pull-right"><i class="icon-remove"></i></a>
 	    </li>
 	  </ul>
-	  <form id="items-form" class="form-inline" action="{% url items %}" method="POST">{% csrf_token %}
-	    <input name="text" class="span3" type="text" placeholder="New ToDo">
+	  <form id="items-form" class="form-inline" method="POST">
+	    <input name="text" type="text" placeholder="New ToDo">
 	    <button type="submit" class="btn todo-add"><i class="icon-plus"></i></button>
 	  </form>
-	  <div id="loader" class="progress progress-striped active">
-	    <div class="bar" style="width:100%"></div>
-	  </div>
 	</div>
       </div>
-
+      <div class="row">
+	<div id="loader" class="progress progress-striped active span6">
+	  <div class="bar" style="width:100%"></div>
+	</div>
+      </div>
     </div> <!-- /container -->
 
 <div id="alert-template" class="alert alert-error" style="display:none">
   <button type="button" class="close" data-dismiss="alert">×</button>
 </div>
+{% csrf_token %}
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-1.7.2.min.js"><\/script>')</script>

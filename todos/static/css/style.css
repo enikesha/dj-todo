@@ -3,3 +3,6 @@ li.complete label {
     color: #777;
     font-style: italic;
 }
+
+#lists-form input[type=text] { width: 120px; }
+#items-form input[type=text] { width: 320px; }

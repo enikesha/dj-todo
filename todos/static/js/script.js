@@ -5,16 +5,28 @@
     });
 
     var $main = $('.main'),
-    $item = $('#todo-template').removeAttr('id'),
     $alert = $('#alert-template').removeAttr('id'),
+    $item = $('#todo-template').removeAttr('id'),
+    $list = $('#list-template').removeAttr('id'),
     $items = $('#items'),
-    $loader = $('#loader'),
-    $form = $('#items-form');
+    $lists = $('#lists'),
+    $loader = $('#loader');
 
+    $loader.ajaxStart(function() {$loader.show(); }).ajaxStop(function() {$loader.hide(); });	
+    $alert.ajaxError(function(data) {
+	addAlert('<strong>Error</strong> ' + data.statusText);
+    });
+
+
+    var getList = function(data) {
+	var item = $list.clone(true).attr('data-pk', data.pk);
+	item.find('a').text(data.fields.name).attr('href', data.url);
+	return item;
+    };
     var getItem = function(data) {
 	var item = $item.clone(true).attr('data-pk', data.pk);
 	item.find('label > span').text(data.fields.text);
-	item.find('a').attr('href', function(idx, val){ return val + data.pk + '/'});
+	item.find('a').attr('href', data.url);
 	if (data.fields.complete) {
 	    item.find(':checkbox').attr('checked', 'true');
 	    item.addClass('complete');
@@ -33,13 +45,8 @@
 	    data:{complete: this.checked},
 	    success: function(data) {
 		$("#items li[data-pk='" + pk + "']").replaceWith(getItem(data[0]).show());
-	    },
-	    error: function(data) {
-		addAlert('<strong>Error</strong> ' + data.statusText);
-	    },
-	    complete: function() { $loader.hide(); }
+	    }
 	});
-	$loader.show();
     });
     $('#items .todo-remove').click(function(e){
 	e.preventDefault();
@@ -49,41 +56,49 @@
 	    type:'DELETE',
 	    success: function(data) {
 		$("#items li[data-pk='" + pk + "']").remove();
-	    },
-	    error: function(data) {
-		addAlert('<strong>Error</strong> ' + data.statusText);
-	    },
-	    complete: function() { $loader.hide(); }
+	    }
 	});
-	$loader.show();
+    });
+    $('#lists a').click(function(e) {
+	e.preventDefault();
+	load_items($(this).parent().attr('data-pk'), this.href);
     });
     
-    $form.submit(function(e){
+    $('#items-form').submit(function(e){
 	e.preventDefault();
-	data = $form.serializeArray();
-	if (data.text === "")
+	$this = $(this);
+	data = $this.serializeArray();
+	if (data[0].value === "")
 	    return;
-	$.ajax($form.attr('action'), {
+	$.ajax(this.action, {
 	    type:'POST',
 	    data: data,
 	    success: function(data) {
 		$items.find('.empty').remove();
 		getItem(data[0]).appendTo($items).show();
-		$form.find("input[type='text']").val("");
-	    },
-	    error: function(data) {
-		addAlert('<strong>Error</strong> ' + data.statusText);
-	    },
-	    complete: function() {
-		$loader.hide(); 
+		$this.find("input[type='text']").val("");
 	    }
 	});
-	$loader.show();
+    });
+    $('#lists-form').submit(function(e){
+	e.preventDefault();
+	$this = $(this);
+	data = $this.serializeArray();
+	if (data[0].value === "")
+	    return;
+	$.ajax(this.action, {
+	    type:'POST',
+	    data: data,
+	    success: function(data) {
+		getList(data[0]).appendTo($lists).show();
+		load_items(data[0].pk, data[0].url);
+		$this.find("input[type='text']").val("");
+	    }
+	});
     });
 
-    $(function(){
-	// Load data
-	$.ajax($('#items-form').attr('action'), {  
+    var load_items = function(list_id, list_url) {
+	$.ajax(list_url, {
             success: function(data) {
 		if (data.length > 0) {
 		    $.each(data, function(i, item) {
@@ -92,7 +107,22 @@
 		} else {	
 		    $items.append("<li class='empty'><i>No todos added yet!</i></li>");
 		}
-		$loader.hide();
+		$('#items-form').attr('action', list_url);
+		$lists.find("li").removeClass('active');
+		$lists.find("li[data-pk='"+list_id+"']").addClass('active');
+            }  
+	});
+	$items.children("li[data-pk]").remove();
+    }
+
+    $(function(){
+	// Load lists
+	$.ajax($('#lists-form').attr('action'), {
+            success: function(data) {
+		$.each(data, function(i, item) {
+		    getList(item).appendTo($lists).show();
+		});
+		load_items(data[0].pk, data[0].url);
             }  
 	});
     });

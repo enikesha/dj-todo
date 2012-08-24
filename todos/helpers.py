@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.utils import simplejson
 
 def serialize(objects):
-    return HttpResponse(serializers.serialize('json', objects),
+    return HttpResponse(serializers.serialize('url_json', objects),
                         mimetype='application/json')
 
 def json(data):

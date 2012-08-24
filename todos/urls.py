@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('todos.views',
     url(r'^$', 'index', name='index'),
-    url(r'^items/$', 'items', name='items'),
-    url(r'^items/(?P<pk>\d+)/$', 'item', name='item'),
+    url(r'^lists/$', 'lists', name='lists'),
+    url(r'^lists/(?P<pk>\d+)/$', 'list', name='list'),
+    url(r'^item/(?P<pk>\d+)/$', 'item', name='item'),
 )

@@ -147,3 +147,7 @@ LOGGING = {
         },
     }
 }
+
+SERIALIZATION_MODULES = {
+    "url_json"    : "todos.url_json_serializer",
+}
