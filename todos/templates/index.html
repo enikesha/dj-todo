@@ -66,13 +66,13 @@
 	      <a href="{% url items %}" class="todo-remove pull-right"><i class="icon-remove"></i></a>
 	    </li>
 	  </ul>
-	  <div id="loader" class="progress progress-striped active">
-	    <div class="bar" style="width:100%"></div>
-	  </div>
 	  <form id="items-form" class="form-inline" action="{% url items %}" method="POST">{% csrf_token %}
 	    <input name="text" class="span3" type="text" placeholder="New ToDo">
 	    <button type="submit" class="btn todo-add"><i class="icon-plus"></i></button>
 	  </form>
+	  <div id="loader" class="progress progress-striped active">
+	    <div class="bar" style="width:100%"></div>
+	  </div>
 	</div>
       </div>
 
