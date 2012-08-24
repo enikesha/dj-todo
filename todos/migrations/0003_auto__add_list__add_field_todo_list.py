@@ -15,6 +15,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('todos', ['List'])
 
+        # Clear existing todos
+        if not db.dry_run:
+            db.clear_table('todos_todo')
+
         # Adding field 'ToDo.list'
         db.add_column('todos_todo', 'list',
                       self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='todos', to=orm['todos.List']),
